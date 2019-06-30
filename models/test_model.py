@@ -4,6 +4,12 @@ import util.util as util
 from .base_model import BaseModel
 from . import networks
 
+# Extra stuff needed for image processing
+import torchvision.transforms as transforms
+from PIL import Image
+
+
+
 
 class TestModel(BaseModel):
     def name(self):
@@ -20,6 +26,11 @@ class TestModel(BaseModel):
         which_epoch = opt.which_epoch
         self.load_network(self.netG, 'G', which_epoch)
 
+
+        if opt.use_online_data:
+            self.using_online_data = True
+            self.single_image_transform = self.get_transform(opt)
+
         print('---------- Networks initialized -------------')
         networks.print_network(self.netG)
         print('-----------------------------------------------')
@@ -31,6 +42,21 @@ class TestModel(BaseModel):
         temp.resize_(input_A.size()).copy_(input_A)
         self.input_A = temp
         self.image_paths = input['A_paths']
+
+
+    # special function that sets the input directly in this way
+    def set_online_input(self, input_img_tensor):
+        assert(self.using_online_data)
+        input_A = input_img_tensor
+        temp = self.input_A.clone()
+        temp.resize_(input_A.size()).copy_(input_A)
+        self.input_A = temp
+
+        # manually set image_paths to be empty list
+        self.image_paths = []
+
+        # do image normalization stuff
+        self.input_A = self.single_image_transform(self.input_A)
 
     def test(self):
         self.real_A = Variable(self.input_A, volatile=True)
@@ -44,3 +70,37 @@ class TestModel(BaseModel):
         real_A = util.tensor2im(self.real_A.data)
         fake_B = util.tensor2im(self.fake_B.data)
         return OrderedDict([('real_A', real_A), ('fake_B', fake_B)])
+
+    def get_transform(self, opt):
+        def __scale_width(img, target_width):
+            ow, oh = img.size
+            if (ow == target_width):
+                return img
+            w = target_width
+            h = int(target_width * oh / ow)
+            return img.resize((w, h), Image.BICUBIC)
+
+        transform_list = []
+        if opt.resize_or_crop == 'resize_and_crop':
+            osize = [opt.loadSizeX, opt.loadSizeY]
+            transform_list.append(transforms.Scale(osize, Image.BICUBIC))
+            transform_list.append(transforms.RandomCrop(opt.fineSize))
+        elif opt.resize_or_crop == 'crop':
+            transform_list.append(transforms.RandomCrop(opt.fineSize))
+        elif opt.resize_or_crop == 'scale_width':
+            transform_list.append(transforms.Lambda(
+                lambda img: __scale_width(img, opt.fineSize)))
+        elif opt.resize_or_crop == 'scale_width_and_crop':
+            transform_list.append(transforms.Lambda(
+                lambda img: __scale_width(img, opt.loadSizeX)))
+            transform_list.append(transforms.RandomCrop(opt.fineSize))
+
+        if opt.isTrain and not opt.no_flip:
+            transform_list.append(transforms.RandomHorizontalFlip())
+
+        transform_list += [transforms.ToTensor(),
+                           transforms.Normalize((0.5, 0.5, 0.5),
+                                                (0.5, 0.5, 0.5))]
+        return transforms.Compose(transform_list)
+
+

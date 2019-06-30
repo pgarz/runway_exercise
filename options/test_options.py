@@ -10,4 +10,9 @@ class TestOptions(BaseOptions):
         self.parser.add_argument('--phase', type=str, default='test', help='train, val, test, etc')
         self.parser.add_argument('--which_epoch', type=str, default='latest', help='which epoch to load? set to latest to use latest cached model')
         self.parser.add_argument('--how_many', type=int, default=5000, help='how many test images to run')
+
+        # New option I added
+        self.parser.add_argument('--use_online_data',  action='store_true', help='Whether to bypass regular file dataloading and instead feed from a direct image')
+
+
         self.isTrain = False
