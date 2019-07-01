@@ -9,8 +9,6 @@ import torchvision.transforms as transforms
 from PIL import Image
 
 
-
-
 class TestModel(BaseModel):
     def name(self):
         return 'TestModel'
@@ -47,6 +45,11 @@ class TestModel(BaseModel):
     # special function that sets the input directly in this way
     def set_online_input(self, input_img_tensor):
         assert(self.using_online_data)
+        # This input is actually a PIL Image and needs to be modified
+        # This call does all the normalization stuff
+        input_img_tensor = self.single_image_transform(input_img_tensor)
+        input_img_tensor = input_img_tensor.unsqueeze(0)
+
         input_A = input_img_tensor
         temp = self.input_A.clone()
         temp.resize_(input_A.size()).copy_(input_A)
@@ -55,8 +58,6 @@ class TestModel(BaseModel):
         # manually set image_paths to be empty list
         self.image_paths = []
 
-        # do image normalization stuff
-        self.input_A = self.single_image_transform(self.input_A)
 
     def test(self):
         self.real_A = Variable(self.input_A, volatile=True)

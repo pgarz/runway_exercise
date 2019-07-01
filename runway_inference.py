@@ -75,6 +75,7 @@ def generate(model, input_args):
     print("IN GENERATE")
     print(input_args)
 
+
     input_img = input_args['blurred_image']
 
     print(input_img)
