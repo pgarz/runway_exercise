@@ -56,7 +56,7 @@ def setup(opts):
 
     return model
 
-inputs = { 'blurred_image': image(width=256, height=256) }
+inputs = { 'blurred_image': image() }
 outputs = { 'sharpened_image': image(width=256, height=256) }
 
 # The @runway.command() decorator is used to create interfaces to call functions
@@ -71,6 +71,9 @@ def generate(model, input_args):
     #    usually a model.
     # 2. The input arguments sent by the remote caller via HTTP. These values
     #    match the schema defined by inputs.
+
+    print("IN GENERATE")
+    print(input_args)
 
     input_img = input_args['blurred_image']
 
@@ -89,4 +92,4 @@ def generate(model, input_args):
 # creates an HTTP server that listens for and fulfills remote requests that
 # trigger commands.
 if __name__ == '__main__':
-    runway.run(host='0.0.0.0', port=8000, model_options={ 'gpu_ids': -1, 'model': 'test',  })
+    runway.run(host='0.0.0.0', port=8000, model_options={ 'gpu_ids': -1, 'model': 'test', 'dataset_mode': 'single' })
