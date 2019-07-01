@@ -77,6 +77,8 @@ def generate(model, input_args):
 
     input_img = input_args['blurred_image']
 
+    print(input_img)
+
     # Set online input should handle transforming things in the right way
     model.set_online_input(input_img)
     model.test()
