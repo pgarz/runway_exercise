@@ -1,7 +1,6 @@
 
 import requests
 import base64
-import json
 
 url = 'http://0.0.0.0:8000/generate'
 
@@ -12,6 +11,4 @@ with open(image_path, 'rb') as fd:
 
 files = {'blurred_image': ('248.png', b64data, 'application/json')}
 headers = {'Content-type': 'application/json'}
-response = requests.post(url, data={'blurred_image': json.dumps(b64data)}, headers=headers)
-
-print(response)
+requests.post(url, files=files, headers=headers)
