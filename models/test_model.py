@@ -49,7 +49,6 @@ class TestModel(BaseModel):
         # This call does all the normalization stuff
         input_img_tensor = self.single_image_transform(input_img_tensor)
         input_img_tensor = input_img_tensor.unsqueeze(0)
-
         input_A = input_img_tensor
         temp = self.input_A.clone()
         temp.resize_(input_A.size()).copy_(input_A)
@@ -82,22 +81,8 @@ class TestModel(BaseModel):
             return img.resize((w, h), Image.BICUBIC)
 
         transform_list = []
-        if opt.resize_or_crop == 'resize_and_crop':
-            osize = [opt.loadSizeX, opt.loadSizeY]
-            transform_list.append(transforms.Scale(osize, Image.BICUBIC))
-            transform_list.append(transforms.RandomCrop(opt.fineSize))
-        elif opt.resize_or_crop == 'crop':
-            transform_list.append(transforms.RandomCrop(opt.fineSize))
-        elif opt.resize_or_crop == 'scale_width':
-            transform_list.append(transforms.Lambda(
-                lambda img: __scale_width(img, opt.fineSize)))
-        elif opt.resize_or_crop == 'scale_width_and_crop':
-            transform_list.append(transforms.Lambda(
-                lambda img: __scale_width(img, opt.loadSizeX)))
-            transform_list.append(transforms.RandomCrop(opt.fineSize))
 
-        if opt.isTrain and not opt.no_flip:
-            transform_list.append(transforms.RandomHorizontalFlip())
+        transform_list.append(transforms.RandomCrop(opt.fineSize))
 
         transform_list += [transforms.ToTensor(),
                            transforms.Normalize((0.5, 0.5, 0.5),
