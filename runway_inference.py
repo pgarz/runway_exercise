@@ -77,13 +77,11 @@ def generate(model, input_args):
 
     input_img = input_args['blurred_image']
 
+    # Set online input should handle transforming things in the right way
     model.set_online_input(input_img)
     model.test()
     visuals = model.get_current_visuals()
 
-    # convert this to a pytorch tensor
-
-    # Apply normalizing transformations
     return visuals
 
 
