@@ -10,7 +10,6 @@ image_path = './blurred_sharp/blurred/248.png'
 with open(image_path, 'rb') as fd:
     b64data = base64.b64encode(fd.read())
 
-
 json_data = "data:image/jpeg;base64," + b64data.decode("utf-8")
 data = {'blurred_image': json_data}
 headers = {'Content-type': 'application/json'}

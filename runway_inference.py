@@ -57,7 +57,7 @@ def setup(opts):
     return model
 
 inputs = { 'blurred_image': image() }
-outputs = { 'sharpened_image': image(width=256, height=256) }
+outputs = { 'sharpened_image': image() }
 
 # The @runway.command() decorator is used to create interfaces to call functions
 # remotely via an HTTP endpoint. This lets you send data to, or get data from,

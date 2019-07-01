@@ -72,18 +72,12 @@ class TestModel(BaseModel):
         return OrderedDict([('real_A', real_A), ('fake_B', fake_B)])
 
     def get_transform(self, opt):
-        def __scale_width(img, target_width):
-            ow, oh = img.size
-            if (ow == target_width):
-                return img
-            w = target_width
-            h = int(target_width * oh / ow)
-            return img.resize((w, h), Image.BICUBIC)
+
 
         transform_list = []
 
-        transform_list.append(transforms.RandomCrop(opt.fineSize))
-
+        # osize = [opt.loadSizeX, opt.loadSizeY]
+        # transform_list.append(transforms.Scale(osize, Image.BICUBIC))
         transform_list += [transforms.ToTensor(),
                            transforms.Normalize((0.5, 0.5, 0.5),
                                                 (0.5, 0.5, 0.5))]
