@@ -3,7 +3,7 @@ from collections import OrderedDict
 import util.util as util
 from .base_model import BaseModel
 from . import networks
-
+import torch
 # Extra stuff needed for image processing
 import torchvision.transforms as transforms
 from PIL import Image
@@ -59,8 +59,9 @@ class TestModel(BaseModel):
 
 
     def test(self):
-        self.real_A = Variable(self.input_A, volatile=True)
-        self.fake_B = self.netG.forward(self.real_A)
+        with torch.no_grad():
+            self.real_A = Variable(self.input_A)
+            self.fake_B = self.netG.forward(self.real_A)
 
     # get image paths
     def get_image_paths(self):
@@ -72,8 +73,6 @@ class TestModel(BaseModel):
         return OrderedDict([('real_A', real_A), ('fake_B', fake_B)])
 
     def get_transform(self, opt):
-
-
         transform_list = []
 
         # osize = [opt.loadSizeX, opt.loadSizeY]

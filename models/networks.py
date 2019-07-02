@@ -189,6 +189,7 @@ class ResnetGenerator(nn.Module):
         self.model = nn.Sequential(*model)
 
     def forward(self, input):
+        output = None
         if self.gpu_ids and isinstance(input.data, torch.cuda.FloatTensor) and self.use_parallel:
             output = nn.parallel.data_parallel(self.model, input, self.gpu_ids)
         else:
