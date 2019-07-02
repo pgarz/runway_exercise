@@ -49,9 +49,11 @@ class TestModel(BaseModel):
         # This call does all the normalization stuff
 
         # Add some padding on the fly if the image has odd dimensions
-        if input_img_tensor.size()[-1] % 2 != 0:
+        extra_pad = transforms.Pad((1,1,0,0))
+        input_img_tensor = extra_pad(input_img_tensor)
+        if input_img_tensor.size[-1] % 2 != 0:
             print("Adding a padding of 1 to the image")
-            self.single_image_transform = [transforms.Pad(1)] + self.single_image_transform
+            self.single_image_transform = [transforms.Pad(1,1,0,0)] + [self.single_image_transform]
             self.single_image_transform = transforms.Compose(self.single_image_transform)
 
         input_img_tensor = self.single_image_transform(input_img_tensor)
