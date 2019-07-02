@@ -196,6 +196,11 @@ class ResnetGenerator(nn.Module):
             output = self.model(input)
         if self.learn_residual:
             # output = input + output
+            print("input")
+            print(input.size())
+            if output:
+                print("output")
+                print(output.size())
             output = torch.clamp(input + output, min=-1, max=1)
         return output
 

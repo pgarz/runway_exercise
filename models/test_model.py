@@ -61,6 +61,8 @@ class TestModel(BaseModel):
     def test(self):
         with torch.no_grad():
             self.real_A = Variable(self.input_A)
+
+            self.fake_B = None
             self.fake_B = self.netG.forward(self.real_A)
 
     # get image paths
