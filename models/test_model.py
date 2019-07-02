@@ -48,6 +48,13 @@ class TestModel(BaseModel):
         # This input is actually a PIL Image and needs to be modified
         # This call does all the normalization stuff
         input_img_tensor = self.single_image_transform(input_img_tensor)
+
+        # Add some padding on the fly if the image has odd dimensions
+        if input_img_tensor.size()[-1] % 2 != 0:
+            print("Adding a padding of 1 to the image")
+            padding_transform = transforms.Pad(1)
+            input_img_tensor = padding_transform(input_img_tensor)
+
         input_img_tensor = input_img_tensor.unsqueeze(0)
         input_A = input_img_tensor
         temp = self.input_A.clone()
