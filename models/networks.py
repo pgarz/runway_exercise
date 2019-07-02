@@ -198,7 +198,7 @@ class ResnetGenerator(nn.Module):
             # output = input + output
             print("input")
             print(input.size())
-            if output:
+            if output is not None:
                 print("output")
                 print(output.size())
             output = torch.clamp(input + output, min=-1, max=1)
