@@ -5,3 +5,5 @@
 *.txt
 *.pth
 *.html
+edge_case_images/man_head.jpg
+edge_case_images/train.jpg

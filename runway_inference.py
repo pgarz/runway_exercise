@@ -20,7 +20,7 @@ import sys
 
 # The setup() function runs once when the model is initialized, and will run
 # again for each well formed HTTP POST request to http://localhost:8000/setup.
-@runway.setup(options={ 'gpu_ids': number(default=-1, min=-1)
+@runway.setup(options={ 'gpu_ids': number(default=0, min=0)
                        , 'model': text(default="test")
                        , 'dataset_mode': text(default="single")
                        # , 'learn_residual': text(default="") #TODO: double check that this is okay
