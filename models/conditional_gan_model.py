@@ -55,6 +55,7 @@ class ConditionalGAN(BaseModel):
 			self.criticUpdates = 5 if opt.gan_type == 'wgan-gp' else 1
 			
 			# define loss functions
+			# TODO: a possible improvement is to remove the use of the perceptual loss and instead use the 
 			self.discLoss, self.contentLoss = init_loss(opt, self.Tensor)
 
 		print('---------- Networks initialized -------------')

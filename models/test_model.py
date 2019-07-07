@@ -51,10 +51,31 @@ class TestModel(BaseModel):
         # Add some padding on the fly if the image has odd dimensions
         # extra_pad = transforms.Pad((1,1,0,0))
         # input_img_tensor = extra_pad(input_img_tensor)
-        if input_img_tensor.size[-1] % 2 != 0:
+        #TODO: also write some code here so that we add padding until the image is a square
+        # Could also just crop to an even size as well if that's easier.
+        print("set_online_input:")
+        print(input_img_tensor)
+
+        height = input_img_tensor.size[-2]
+        width = input_img_tensor.size[-1]
+
+        if height % 2 != 0 or width % 2 != 0 or height != width:
             print("Adding a padding of 1 to the image")
-            self.single_image_transform = [transforms.Pad((1,1,0,0))] + [self.single_image_transform]
+            print(input_img_tensor.size)
+
+            # Code for padding
+            # self.single_image_transform = [transforms.Pad((1,1,0,0))] + [self.single_image_transform]
+            # self.single_image_transform = transforms.Compose(self.single_image_transform)
+
+            # Code for instead applying an image crop
+            min_dim = min([height, width])
+            # fit to nearest even dimension
+            min_dim = min_dim -1 if min_dim % 2 != 0 else min_dim
+
+
+            self.single_image_transform = [transforms.CenterCrop((min_dim, min_dim))] + [self.single_image_transform]
             self.single_image_transform = transforms.Compose(self.single_image_transform)
+
 
         input_img_tensor = self.single_image_transform(input_img_tensor)
 

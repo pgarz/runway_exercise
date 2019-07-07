@@ -86,10 +86,16 @@ def generate(model, input_args):
     visuals = model.get_current_visuals()
 
     fake_deblurred_img = visuals['fake_B']
+
+    print("returned image size")
+    print(fake_deblurred_img.shape)
+
     fake_deblurred_img = Image.fromarray(fake_deblurred_img)
 
+
+
     print("Finished inference and returning")
-    fake_deblurred_img.save("full_res_test.png")
+    # fake_deblurred_img.save("full_res_test.png")
 
     return {'sharpened_image': fake_deblurred_img}
 
