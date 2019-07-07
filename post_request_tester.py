@@ -3,6 +3,9 @@ import requests
 import base64
 import json
 
+# This file was made as a test script to locally send images in an easy way with one click. Easier to use than the
+# command-line based instructions in the tutorial.
+
 url = 'http://0.0.0.0:8000/generate'
 
 # image_path = './blurred_sharp/blurred/248.png'

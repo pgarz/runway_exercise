@@ -51,14 +51,14 @@ class TestModel(BaseModel):
         # Add some padding on the fly if the image has odd dimensions
         # extra_pad = transforms.Pad((1,1,0,0))
         # input_img_tensor = extra_pad(input_img_tensor)
-        #TODO: also write some code here so that we add padding until the image is a square
-        # Could also just crop to an even size as well if that's easier.
+
         print("set_online_input:")
         print(input_img_tensor)
 
         height = input_img_tensor.size[-2]
         width = input_img_tensor.size[-1]
 
+        # Cropping to the min even dimension if the image isn't square or of even dims
         if height % 2 != 0 or width % 2 != 0 or height != width:
             print("Adding a padding of 1 to the image")
             print(input_img_tensor.size)
@@ -67,11 +67,10 @@ class TestModel(BaseModel):
             # self.single_image_transform = [transforms.Pad((1,1,0,0))] + [self.single_image_transform]
             # self.single_image_transform = transforms.Compose(self.single_image_transform)
 
-            # Code for instead applying an image crop
+            # Code for applying a crop
             min_dim = min([height, width])
             # fit to nearest even dimension
             min_dim = min_dim -1 if min_dim % 2 != 0 else min_dim
-
 
             self.single_image_transform = [transforms.CenterCrop((min_dim, min_dim))] + [self.single_image_transform]
             self.single_image_transform = transforms.Compose(self.single_image_transform)
@@ -105,11 +104,9 @@ class TestModel(BaseModel):
         fake_B = util.tensor2im(self.fake_B.data)
         return OrderedDict([('real_A', real_A), ('fake_B', fake_B)])
 
+    # A variation of get_transform found in base_dataset.py so we can do this online
     def get_transform(self, opt):
         transform_list = []
-
-        # osize = [opt.loadSizeX, opt.loadSizeY]
-        # transform_list.append(transforms.Scale(osize, Image.BICUBIC))
         transform_list += [transforms.ToTensor(),
                            transforms.Normalize((0.5, 0.5, 0.5),
                                                 (0.5, 0.5, 0.5))]

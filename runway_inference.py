@@ -31,10 +31,10 @@ def setup(opts):
     model_type = opts['model']
     dataset_mode = opts['dataset_mode']
 
-    print("given gpu_id")
+    print("Given gpu_id")
     print(gpu_id)
 
-
+    # Just manually putting in the needed commandline parameters
     default_args = ['--gpu_ids', gpu_id, '--dataroot',
      './blurred_sharp/blurred', '--model', model_type, '--dataset_mode', dataset_mode, '--learn_residual',
     '--use_online_data']
@@ -48,11 +48,6 @@ def setup(opts):
     opt.batchSize = 1  # test code only supports batchSize = 1
     opt.serial_batches = True  # no shuffle
     opt.no_flip = True  # no flip
-
-
-    # data_loader = CreateDataLoader(opt)
-    # dataset = data_loader.load_data()
-
 
     model = create_model(opt)
 
