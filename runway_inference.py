@@ -95,7 +95,7 @@ def generate(model, input_args):
 
 
     print("Finished inference and returning")
-    # fake_deblurred_img.save("full_res_test.png")
+    fake_deblurred_img.save("full_res_test.png")
 
     return {'sharpened_image': fake_deblurred_img}
 
