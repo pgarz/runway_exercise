@@ -31,6 +31,9 @@ def setup(opts):
     model_type = opts['model']
     dataset_mode = opts['dataset_mode']
 
+    print("given gpu_id")
+    print(gpu_id)
+
 
     default_args = ['--gpu_ids', gpu_id, '--dataroot',
      './blurred_sharp/blurred', '--model', model_type, '--dataset_mode', dataset_mode, '--learn_residual',

@@ -5,8 +5,9 @@ import json
 
 url = 'http://0.0.0.0:8000/generate'
 
-image_path = './blurred_sharp/blurred/248.png'
+# image_path = './blurred_sharp/blurred/248.png'
 # image_path = './edge_case_images/macbook.png'
+image_path = './edge_case_images/train.jpg'
 
 with open(image_path, 'rb') as fd:
     b64data = base64.b64encode(fd.read())
