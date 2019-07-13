@@ -43,6 +43,7 @@ for i, data in enumerate(dataset):
 	print('process image... %s' % img_path)
 	visualizer.save_images(webpage, visuals, img_path)
 
+# empty comment
 	
 #avgPSNR /= counter
 #avgSSIM /= counter
