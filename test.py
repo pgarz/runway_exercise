@@ -42,7 +42,7 @@ for i, data in enumerate(dataset):
 	img_path = model.get_image_paths()
 	print('process image... %s' % img_path)
 	visualizer.save_images(webpage, visuals, img_path)
-	
+
 	
 #avgPSNR /= counter
 #avgSSIM /= counter
